@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_24_183150) do
     t.index ["power_id"], name: "index_hero_powers_on_power_id"
   end
 
-  create_table "heroes", force: :cascade do |t|
+  create_table "heros", force: :cascade do |t|
     t.string "name"
     t.string "super_name"
     t.datetime "created_at", null: false
