@@ -28,11 +28,6 @@ class PowersController < ApplicationController
 
   end
 
-  # DELETE /powers/1
-  def destroy
-    @power.destroy
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_power

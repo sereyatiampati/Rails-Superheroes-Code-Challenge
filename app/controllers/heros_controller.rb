@@ -15,24 +15,6 @@ class HerosController < ApplicationController
     render json: @hero, serializer: EachHeroSerializer
   end
 
-  # POST /heros
-  def create
-    hero = Hero.create!(hero_params)
-    render json: hero
-
-  end
-
-  # PATCH/PUT /heros/1
-  def update
-    @hero.update!(hero_params)
-      render json: @hero
-  end
-
-  # DELETE /heros/1
-  def destroy
-    @hero.destroy
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_hero
