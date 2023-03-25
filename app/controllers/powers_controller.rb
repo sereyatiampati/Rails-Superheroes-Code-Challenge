@@ -1,5 +1,7 @@
 class PowersController < ApplicationController
   before_action :set_power, only: %i[ show update destroy ]
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from ActiveRecord::RecordInvalid, with: :invalid_entry
 
   # GET /powers
   def index
@@ -15,22 +17,15 @@ class PowersController < ApplicationController
 
   # POST /powers
   def create
-    @power = Power.new(power_params)
-
-    if @power.save
-      render json: @power, status: :created, location: @power
-    else
-      render json: @power.errors, status: :unprocessable_entity
-    end
+    @power = Power.create!(power_params)
+    render json: @power
   end
 
   # PATCH/PUT /powers/1
   def update
-    if @power.update(power_params)
-      render json: @power
-    else
-      render json: @power.errors, status: :unprocessable_entity
-    end
+    @power.update!(power_params)
+    render json: @power
+
   end
 
   # DELETE /powers/1
@@ -46,6 +41,14 @@ class PowersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def power_params
-      params.require(:power).permit(:name, :description)
+      params.permit(:name, :description)
+    end
+
+    def not_found
+      render json: {error: "Power not Found"}, status: :not_found
+    end
+
+    def invalid_entry(invalid)
+      render json:{errors: invalid.record.errors.full_messages}, status: :unprocessable_entity
     end
 end
