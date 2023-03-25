@@ -27,7 +27,10 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "faker", "~> 3.1"
 end
 
 
 gem "active_model_serializers", "~> 0.10.13"
+
+
