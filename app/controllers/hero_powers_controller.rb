@@ -1,5 +1,6 @@
 class HeroPowersController < ApplicationController
   before_action :set_hero_power, only: %i[ show update destroy ]
+  rescue_from ActiveRecord::RecordInvalid, with: :invalid_entry
 
   # GET /hero_powers
   def index
@@ -15,22 +16,14 @@ class HeroPowersController < ApplicationController
 
   # POST /hero_powers
   def create
-    @hero_power = HeroPower.new(hero_power_params)
-
-    if @hero_power.save
-      render json: @hero_power, status: :created, location: @hero_power
-    else
-      render json: @hero_power.errors, status: :unprocessable_entity
-    end
+    @hero_power = HeroPower.create!(hero_power_params)
+    render json: @hero_power.hero, serializer: HeroPowersSerializer
   end
 
   # PATCH/PUT /hero_powers/1
   def update
-    if @hero_power.update(hero_power_params)
+    @hero_power.update!(hero_power_params)
       render json: @hero_power
-    else
-      render json: @hero_power.errors, status: :unprocessable_entity
-    end
   end
 
   # DELETE /hero_powers/1
@@ -46,6 +39,10 @@ class HeroPowersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def hero_power_params
-      params.fetch(:hero_power, {})
+      params.permit(:strength, :hero_id, :power_id)
+    end
+
+    def invalid_entry(invalid)
+      render json:{errors: invalid.record.errors.full_messages}, status: :unprocessable_entity
     end
 end
